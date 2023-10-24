@@ -1,0 +1,32 @@
+
+{% extends 'main/general.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block body %}
+
+
+
+    <div class="container d-flex justify-content-center align-items-center mx-auto py-4 border rounded" style="max-width:33%;">
+        <form method="post">
+            <h1 class="col-12 text-center">Регистрация</h1>
+            {% csrf_token %}
+
+
+            {{ form|crispy }}
+{#            {% for f in form %}#}
+{#                <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>#}
+{#                <div class="form-error">{{ f.errors }}</div>#}
+{#            {% endfor %}#}
+            <br>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Регистрация</button>
+        </form>
+    </div>
+    <script>
+        deleteAsteriskFields()
+        leftSmallUl()
+    </script>
+
+{% endblock %}

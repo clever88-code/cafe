@@ -1,0 +1,91 @@
+{% extends 'main/general.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Заявка{% endblock %}
+{% block body %}
+
+<div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="add_application-tab" data-bs-toggle="tab" href="#add_application" role="tab" aria-controls="add_application" aria-selected="true">Создать заказ</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="record-tab" data-bs-toggle="tab" href="#record" role="tab" aria-controls="record" aria-selected="false">Заказы</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="add_application" role="tabpanel" aria-labelledby="add_application-tab">
+            <div class="card w-100">
+                <div class="card-body">
+                    <h2>Создание нового заказа</h2>
+                    <form method="post" action="{% url 'request:add_orders' %}">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="w-100 btn btn-lg btn-primary mt-4" type="submit" id="submit" onclick="clicks();">Создать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="record" role="tabpanel" aria-labelledby="record-tab">
+            <div class="card w-100 mt-4">
+                <div class="card-body ">
+                    <h2>Заказы</h2>
+                    <ul class="list-group">
+                        {% for app in user_applications %}
+                            <li class="list-group-item d-flex flex-column justify-content-between align-items-start ">
+                                <div class="w-25">
+                                    <div class="list-group-item fw-bold">Дата: <span class="fw-normal">{{ app.date }}</span></div>
+                                    <div class="list-group-item fw-bold">Заказ: <span class="fw-normal" >{{ app.description }}</span> </div>
+                                    <div class="list-group-item fw-bold">Срочность: <span class="fw-normal" >{{ app.number_cab }}</span></div>
+                                    <div class="list-group-item fw-bold">Cтатус: <span class="fw-normal" >{{ app.status_application }}</span></div>
+                                </div>
+                                <div class="d-flex justify-content-between list-group-item w-25">
+                                    <button class="btn btn-primary" type="button"  onclick="editApplication({{ app.id }})">Редактировать</button>
+                                    <form method="post" action="{% url 'request:delete_application' app.id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger" type="submit">Удалить</button>
+                                    </form>
+                                </div>
+                            </li>
+
+                            <form method="post" class="edit-form w-25" action="{% url 'request:edit_application' app.id %}" style="display: none;">
+                                {% csrf_token %}
+                                <input type="hidden" name="editId" value="{{ app.id }}">
+                                <div class="form-floating my-2">
+                                    <select class="form-select" name="number_cab" id="floatingSelect" aria-label="Floating label select example">
+                                      {% for cabinet in all_offices %}
+                                      <option value="{{ cabinet.id }}" {% if cabinet.id == app.number_cab_id %} selected {% endif %}>{{ cabinet.number }}</option>
+                                      {% endfor %}
+                                      
+                                    </select>
+                                    <label for="floatingSelect">Выберите кабинет</label>
+                                </div>
+                                <div class="form-floating my-2">
+                                    <textarea class="form-control" placeholder="Опишите проблему" name="description" id="floatingTextarea2" style="height: 100px">{{ app.description }}</textarea>
+                                    <label for="floatingTextarea2">Опишите проблему</label>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary" onclick="edit_form();">Сохранить</button>
+                                    <button type="button" class="btn btn-secondary" onclick="cancelEdit(this)">Отмена</button>
+                                </div>
+                                
+                            </form>
+                            <hr>
+                        {% empty %}
+                            <p>У вас нет активных заказов.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+    deleteAsteriskFields()
+    itemFormRow()
+</script>
+{% endblock %}

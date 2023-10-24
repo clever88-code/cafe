@@ -1,0 +1,22 @@
+{% extends 'main/general.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Главная страница{% endblock  %}
+
+{% block  body %}
+{% load static %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Cafe clever</h1>
+        <p>
+          {% if user.is_authenticated %}
+          <a href="/record" class="btn btn-primary my-2">Начать</a>
+          {% else %}
+          <a href="{% url 'home' %}" class="btn btn-primary my-2">Начать</a>
+          <h1 class="lead text-muted">Чтобы пользоватся функционалом авторизируйтесь!</h1>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </section>
+{% endblock %}

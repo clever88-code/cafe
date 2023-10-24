@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="logo" href="../../static/main/img/pngwing(2).com">-->
+    <title>{% block title %} {% endblock title %}</title>
+    <!-- подлючения Bootstrap -->
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap-datetimepicker.min.css' %}">
+
+    <!--<link rel="stylesheet" href ="{% static 'main/css/all.min.css' %}">-->
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+
+
+    <link rel="shortcut icon" href="{% static 'main/img/favicon.png' %}">
+
+    <script src="{% static 'main/js/all.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap-datetimepicker.ru.js' %}"></script>
+    <script src="{% static 'main/js/main.js' %}"></script>
+    <script src="{% static 'main/js/moment.js' %}"></script>
+    <script src="{% static 'main/js/imask.js' %}"></script>
+
+</head>
+<body>
+<section>
+
+
+    <div class="container-fluid">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <a href="{% url 'home' %}"
+               class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img src="{% static 'main/img/logo2.png' %}" alt="">
+            </a>
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
+                {% if user.is_authenticated %}
+                {% if perms.core.view_application %}
+                <li><a href="/record" class="nav-link px-2 link-secondary">Заказы</a></li>
+                {% endif %}
+                {% if perms.core.view_status %}
+                <li><a href="/labs_applications" class="nav-link px-2 link-secondary">  </a></li>
+                {% endif %}
+                {% if perms.core.view_office %}
+                <li><a href="/labs_admin_applications" class="nav-link px-2 link-secondary"></a></li>
+                {% endif %}
+                {% endif %}
+
+            </ul>
+
+            <div class="col-md-3 text-end">
+
+                {% if user.is_authenticated %}
+                <a class="btn btn-outline-primary me-2" href="{% url 'home' %}">{{ user.username }}</a>
+                <a class="btn btn-outline-primary me-2" href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+
+                <a class="btn btn-outline-primary me-2" href="{% url 'login' %}">Войти</a>
+                <a class="btn btn-primary" href="{% url 'registration' %}">Регистрация</a>
+
+                {% endif %}
+            </div>
+               
+        </header>
+
+    </div>
+    <div class="footer">
+        <footer>© 2023 ООО applications. Все права защищены by clever. <!-- "подвал" сайта -->
+            <address>clever@irkat.ru</address>
+        </footer>
+    </div>
+
+
+
+</section>
+
+<main>
+
+    {% block body %} {% endblock body %}
+
+</main>
+</body>
+</html>
